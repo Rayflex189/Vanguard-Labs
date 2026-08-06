@@ -1,3 +1,8 @@
-from django.contrib import admin
+# cms/urls.py
+from django.urls import path
+from .views import PageDetailView
 
-# Register your models here.
+app_name = 'cms'
+urlpatterns = [
+    path('<slug:slug>/', PageDetailView.as_view(), name='page'),
+]
