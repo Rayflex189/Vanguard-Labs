@@ -1,8 +1,10 @@
-# cms/urls.py
-from django.urls import path
+from django.urls import path, re_path
 from .views import PageDetailView
 
 app_name = 'cms'
+
 urlpatterns = [
-    path('<slug:slug>/', PageDetailView.as_view(), name='page'),
+    # Catch-all for any path (including root)
+    # The path is captured as a string. We'll handle root via the view.
+    re_path(r'^(?P<path>.*)/?$', PageDetailView.as_view(), name='page'),
 ]
