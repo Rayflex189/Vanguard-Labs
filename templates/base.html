@@ -1,1 +1,514 @@
 
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}Vanguard Labs – Building Tomorrow's Digital Experiences{% endblock %}</title>
+    <meta name="description" content="{% block meta_description %}Vanguard Labs – premium digital agency building tomorrow's digital experiences with cutting-edge technology and design.{% endblock %}" />
+    <meta name="keywords" content="{% block meta_keywords %}Vanguard Labs, digital agency, web development, UI/UX, AI integration, brand identity{% endblock %}" />
+
+    <!-- Open Graph / Social -->
+    <meta property="og:title" content="{% block og_title %}Vanguard Labs – Building Tomorrow's Digital Experiences{% endblock %}" />
+    <meta property="og:description" content="{% block og_description %}Premium digital agency crafting seamless experiences that users love and businesses thrive on.{% endblock %}" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="{{ request.build_absolute_uri }}" />
+    {% block og_image %}<meta property="og:image" content="{% static 'images/og-image.jpg' %}" />{% endblock %}
+
+    <!-- Favicon -->
+    <link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon" />
+    <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" />
+
+    <!-- Tailwind CSS (compiled) -->
+    <link rel="stylesheet" href="{% static 'css/output.css' %}" />
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+
+    <!-- Font Awesome 6 (Free) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+    <!-- Google Fonts (Inter) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,100..900&display=swap" rel="stylesheet" />
+
+    <!-- Block for extra head content -->
+    {% block extra_head %}{% endblock %}
+</head>
+
+<body class="bg-black text-white font-['Inter',sans-serif] antialiased overflow-x-hidden">
+
+    <!-- ============================================================ -->
+    <!-- LOADING OVERLAY                                             -->
+    <!-- ============================================================ -->
+    <div id="loader" class="fixed inset-0 z-[9999] flex items-center justify-center bg-black transition-opacity duration-700">
+        <div class="flex flex-col items-center gap-4">
+            <div class="relative w-16 h-16">
+                <div class="absolute inset-0 border-4 border-blue-500/20 rounded-full"></div>
+                <div class="absolute inset-0 border-4 border-t-blue-500 border-r-violet-500 border-b-transparent border-l-transparent rounded-full animate-spin"></div>
+            </div>
+            <p class="text-sm text-white/60 tracking-widest uppercase animate-pulse">Loading</p>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SCROLL PROGRESS BAR                                         -->
+    <!-- ============================================================ -->
+    <div id="scroll-progress" class="fixed top-0 left-0 h-1 bg-gradient-to-r from-blue-500 via-violet-500 to-purple-500 z-[9998] w-0 transition-width duration-100 ease-out"></div>
+
+    <!-- ============================================================ -->
+    <!-- CUSTOM CURSOR (desktop only)                                -->
+    <!-- ============================================================ -->
+    <div id="custom-cursor" class="fixed pointer-events-none z-[9997] hidden lg:block">
+        <div class="w-6 h-6 -ml-3 -mt-3 rounded-full border border-white/40 bg-white/5 backdrop-blur-sm transition-transform duration-150"></div>
+        <div class="w-2 h-2 -ml-1 -mt-1 rounded-full bg-blue-400/80 absolute transition-transform duration-150"></div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- BACK TO TOP BUTTON                                          -->
+    <!-- ============================================================ -->
+    <button id="back-to-top"
+    class="fixed bottom-6 right-6 z-[999] w-12 h-12 rounded-full bg-gradient-to-br from-blue-600 to-violet-600 text-white shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 transition-all duration-300 opacity-0 scale-75 pointer-events-none"
+    aria-label="Back to top">
+    <i class="fas fa-arrow-up"></i>
+</button>
+
+<!-- ============================================================ -->
+<!-- STICKY HEADER / NAVIGATION                                  -->
+<!-- ============================================================ -->
+<header id="main-header"
+class="fixed top-0 left-0 right-0 z-[9996] transition-all duration-300 px-4 md:px-8 py-3">
+<div class="max-w-7xl mx-auto flex items-center justify-between">
+    <!-- Logo -->
+    <a href="/" class="flex items-center gap-2 group">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center shadow-lg shadow-blue-500/20">
+            <span class="text-white font-bold text-lg">VL</span>
+        </div>
+        <span class="text-xl font-bold tracking-tight text-white/90 group-hover:text-white transition">Vanguard Labs</span>
+    </a>
+
+    <!-- Desktop Nav -->
+    <nav class="hidden md:flex items-center gap-8 text-sm font-medium">
+        <a href="/portfolio/" class="text-white/70 hover:text-white transition">Portfolio</a>
+        <a href="/services/" class="text-white/70 hover:text-white transition">Services</a>
+        <a href="/team/" class="text-white/70 hover:text-white transition">Team</a>
+        <a href="/blog/" class="text-white/70 hover:text-white transition">Blog</a>
+        <a href="/contact/" class="px-5 py-2 rounded-full bg-gradient-to-r from-blue-600 to-violet-600 text-white text-sm font-medium hover:shadow-lg hover:shadow-blue-500/30 transition-all">
+            Get Started
+        </a>
+    </nav>
+
+    <!-- Mobile hamburger -->
+    <button id="mobile-toggle" class="md:hidden text-white/80 hover:text-white transition p-2" aria-label="Toggle menu">
+        <i class="fas fa-bars text-xl"></i>
+    </button>
+</div>
+
+<!-- Mobile menu -->
+<div id="mobile-menu" class="hidden md:hidden mt-4 bg-white/5 backdrop-blur-2xl border border-white/10 rounded-2xl p-6 glass">
+    <nav class="flex flex-col gap-4 text-center">
+        <a href="/portfolio/" class="text-white/80 hover:text-white transition py-2">Portfolio</a>
+        <a href="/services/" class="text-white/80 hover:text-white transition py-2">Services</a>
+        <a href="/team/" class="text-white/80 hover:text-white transition py-2">Team</a>
+        <a href="/blog/" class="text-white/80 hover:text-white transition py-2">Blog</a>
+        <a href="/contact/" class="px-6 py-3 rounded-full bg-gradient-to-r from-blue-600 to-violet-600 text-white font-medium hover:shadow-lg hover:shadow-blue-500/30 transition-all">Get Started</a>
+    </nav>
+</div>
+</header>
+
+<!-- ============================================================ -->
+<!-- MAIN CONTENT                                                -->
+<!-- ============================================================ -->
+<main class="relative z-10 pt-20">
+    {% block content %}
+    <!-- Default hero will be shown if no block content -->
+    <!-- ========================================================== -->
+    <!-- HERO SECTION                                               -->
+    <!-- ========================================================== -->
+    <section class="relative min-h-screen flex items-center overflow-hidden px-4 md:px-8">
+
+        <!-- Particle background canvas -->
+        <canvas id="particles-canvas" class="absolute inset-0 w-full h-full -z-10"></canvas>
+
+        <!-- Radial glow behind hero -->
+        <div class="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_center,rgba(59,130,246,0.08),transparent_70%)]"></div>
+
+        <div class="max-w-7xl mx-auto w-full py-20 md:py-32">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+
+                <!-- Left column: Text -->
+                <div class="lg:col-span-7 space-y-6 fade-in">
+                    <!-- Badge -->
+                    <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-medium text-blue-300 tracking-wider uppercase">
+                        <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
+                        Active · Premium
+                    </span>
+
+                    <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.1] tracking-tight">
+                        <span class="bg-gradient-to-r from-blue-400 via-violet-400 to-purple-400 bg-clip-text text-transparent hero-title">
+                            Crafting Digital
+                        </span>
+                        <br />
+                        <span class="text-white">Experiences That Matter</span>
+                    </h1>
+
+                    <p class="text-base sm:text-lg text-white/70 max-w-lg leading-relaxed">
+                        We design interfaces that combine beauty with functionality, creating seamless experiences that users love and businesses thrive on.
+                    </p>
+
+                    <!-- CTA Buttons -->
+                    <div class="flex flex-wrap gap-4 pt-2">
+                        <a href="/portfolio/" class="group relative px-8 py-3.5 rounded-full bg-gradient-to-r from-blue-600 to-violet-600 text-white font-medium transition-all hover:shadow-2xl hover:shadow-blue-500/30 overflow-hidden">
+                            <span class="relative z-10 flex items-center gap-2">
+                                View Portfolio
+                                <i class="fas fa-arrow-right text-sm group-hover:translate-x-1 transition-transform"></i>
+                            </span>
+                            <div class="absolute inset-0 bg-gradient-to-r from-blue-500 to-violet-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                        </a>
+                        <a href="#" class="group px-8 py-3.5 rounded-full border border-white/20 text-white/80 hover:text-white hover:bg-white/5 transition-all flex items-center gap-2">
+                            <i class="fas fa-play-circle text-blue-400 group-hover:text-blue-300 transition"></i>
+                            Watch Showreel
+                        </a>
+                    </div>
+
+                    <!-- Stats -->
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-6 pt-8">
+                        <div class="stat-item">
+                            <div class="text-2xl sm:text-3xl font-bold text-white counter" data-target="150">0</div>
+                            <div class="text-xs text-white/50 uppercase tracking-wider">Projects Delivered</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="text-2xl sm:text-3xl font-bold text-white counter" data-target="98">0</div>
+                            <div class="text-xs text-white/50 uppercase tracking-wider">Client Satisfaction</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="text-2xl sm:text-3xl font-bold text-white counter" data-target="5">0</div>
+                            <div class="text-xs text-white/50 uppercase tracking-wider">Years of Experience</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="text-2xl sm:text-3xl font-bold text-white counter" data-target="100">0</div>
+                            <div class="text-xs text-white/50 uppercase tracking-wider">% Satisfaction</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right column: Glass card with stats / featured -->
+                <div class="lg:col-span-5 flex justify-center lg:justify-end">
+                    <div class="w-full max-w-md p-6 sm:p-8 rounded-3xl glass border border-white/10 shadow-2xl shadow-blue-500/5 hover:shadow-blue-500/10 transition-shadow duration-500 fade-in">
+                        <div class="flex items-center gap-3 mb-6">
+                            <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500/20 to-violet-500/20 flex items-center justify-center border border-white/10">
+                                <i class="fas fa-rocket text-blue-400 text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-white">Why Vanguard?</h3>
+                                <p class="text-xs text-white/50">Trusted by industry leaders</p>
+                            </div>
+                        </div>
+
+                        <!-- Trusted logos -->
+                        <div class="grid grid-cols-3 gap-4 mb-6">
+                            <div class="flex items-center justify-center h-12 rounded-xl bg-white/5 border border-white/5 text-white/40 font-bold text-sm">
+                                Command+Z
+                            </div>
+                            <div class="flex items-center justify-center h-12 rounded-xl bg-white/5 border border-white/5 text-white/40 font-bold text-sm">
+                                Phantom
+                            </div>
+                            <div class="flex items-center justify-center h-12 rounded-xl bg-white/5 border border-white/5 text-white/40 font-bold text-sm">
+                                Ruby
+                            </div>
+                            <div class="flex items-center justify-center h-12 rounded-xl bg-white/5 border border-white/5 text-white/40 font-bold text-sm">
+                                Chipset
+                            </div>
+                            <div class="flex items-center justify-center h-12 rounded-xl bg-white/5 border border-white/5 text-white/40 font-bold text-sm col-span-1">
+                                Acme Corp
+                            </div>
+                            <div class="flex items-center justify-center h-12 rounded-xl bg-white/5 border border-white/5 text-white/40 font-bold text-sm">
+                                24/7
+                            </div>
+                        </div>
+
+                        <!-- Trust badge -->
+                        <div class="flex items-center gap-2 pt-4 border-t border-white/10">
+                            <div class="flex -space-x-2">
+                                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500/30 to-violet-500/30 border border-white/10 flex items-center justify-center text-xs text-white/60">A</div>
+                                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500/30 to-violet-500/30 border border-white/10 flex items-center justify-center text-xs text-white/60">B</div>
+                                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500/30 to-violet-500/30 border border-white/10 flex items-center justify-center text-xs text-white/60">C</div>
+                            </div>
+                            <span class="text-sm text-white/60">Trusted by <span class="text-white font-medium">50+</span> companies worldwide</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Scroll indicator -->
+        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/30 animate-bounce">
+            <span class="text-xs uppercase tracking-widest">Scroll</span>
+            <i class="fas fa-chevron-down text-sm"></i>
+        </div>
+    </section>
+    {% endblock %}
+</main>
+
+<!-- ============================================================ -->
+<!-- FOOTER                                                       -->
+<!-- ============================================================ -->
+<footer class="relative z-10 border-t border-white/5 bg-black/50 backdrop-blur-sm">
+    <div class="max-w-7xl mx-auto px-4 md:px-8 py-12">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+
+            <!-- Brand -->
+            <div class="space-y-4">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center">
+                        <span class="text-white font-bold text-xs">VL</span>
+                    </div>
+                    <span class="text-lg font-bold text-white">Vanguard Labs</span>
+                </div>
+                <p class="text-sm text-white/50 max-w-xs leading-relaxed">
+                    Building tomorrow's digital experiences with cutting-edge technology and design.
+                </p>
+                <div class="flex gap-3 pt-2">
+                    <a href="#" class="w-9 h-9 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 flex items-center justify-center text-white/50 hover:text-white transition">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="w-9 h-9 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 flex items-center justify-center text-white/50 hover:text-white transition">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="#" class="w-9 h-9 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 flex items-center justify-center text-white/50 hover:text-white transition">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="#" class="w-9 h-9 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 flex items-center justify-center text-white/50 hover:text-white transition">
+                        <i class="fab fa-youtube"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Quick links -->
+            <div>
+                <h4 class="text-sm font-semibold text-white/60 uppercase tracking-wider mb-4">Explore</h4>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="/portfolio/" class="text-white/40 hover:text-white transition">Portfolio</a></li>
+                    <li><a href="/services/" class="text-white/40 hover:text-white transition">Services</a></li>
+                    <li><a href="/team/" class="text-white/40 hover:text-white transition">Team</a></li>
+                    <li><a href="/blog/" class="text-white/40 hover:text-white transition">Blog</a></li>
+                </ul>
+            </div>
+
+            <!-- Resources -->
+            <div>
+                <h4 class="text-sm font-semibold text-white/60 uppercase tracking-wider mb-4">Resources</h4>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="/knowledgebase/" class="text-white/40 hover:text-white transition">Knowledge Base</a></li>
+                    <li><a href="/events/" class="text-white/40 hover:text-white transition">Events</a></li>
+                    <li><a href="/careers/" class="text-white/40 hover:text-white transition">Careers</a></li>
+                    <li><a href="/contact/" class="text-white/40 hover:text-white transition">Contact</a></li>
+                </ul>
+            </div>
+
+            <!-- Newsletter -->
+            <div>
+                <h4 class="text-sm font-semibold text-white/60 uppercase tracking-wider mb-4">Stay Updated</h4>
+                <p class="text-sm text-white/40 mb-3">Subscribe to our newsletter for the latest updates.</p>
+                <form action="#" method="post" class="flex flex-col gap-2">
+                    {% csrf_token %}
+                    <div class="flex overflow-hidden rounded-xl border border-white/10 bg-white/5 focus-within:border-blue-500/50 transition">
+                        <input type="email" name="email" placeholder="Enter your email" class="flex-1 px-4 py-2 bg-transparent text-sm text-white placeholder-white/30 focus:outline-none" />
+                        <button type="submit" class="px-4 py-2 bg-gradient-to-r from-blue-600 to-violet-600 text-white text-sm font-medium hover:opacity-90 transition">
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+
+        <!-- Copyright -->
+        <div class="mt-10 pt-6 border-t border-white/5 flex flex-col sm:flex-row justify-between items-center gap-3 text-xs text-white/30">
+            <span>&copy; {% now "Y" %} Vanguard Labs. All rights reserved.</span>
+            <div class="flex gap-6">
+                <a href="#" class="hover:text-white/60 transition">Privacy</a>
+                <a href="#" class="hover:text-white/60 transition">Terms</a>
+                <a href="#" class="hover:text-white/60 transition">Cookies</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- ============================================================ -->
+<!-- JAVASCRIPT                                                   -->
+<!-- ============================================================ -->
+
+<!-- Main JS bundle -->
+<script src="{% static 'js/main.js' %}"></script>
+
+<!-- Particles background -->
+<script src="{% static 'js/particles.js' %}"></script>
+
+<!-- Carousel (if needed) -->
+<script src="{% static 'js/carousel.js' %}"></script>
+
+<!-- Filter (portfolio) -->
+<script src="{% static 'js/filter.js' %}"></script>
+
+<!-- Search (global) -->
+<script src="{% static 'js/search.js' %}"></script>
+
+<!-- Animations -->
+<script src="{% static 'js/animations.js' %}"></script>
+
+<!-- Block for extra scripts -->
+{% block extra_scripts %}{% endblock %}
+
+<!-- ============================================================ -->
+<!-- INLINE JS: Mobile toggle, cursor, back-to-top, counters     -->
+<!-- ============================================================ -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+
+        // --- Mobile toggle ---
+        const toggleBtn = document.getElementById('mobile-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+        if (toggleBtn && mobileMenu) {
+            toggleBtn.addEventListener('click', function() {
+                mobileMenu.classList.toggle('hidden');
+                const icon = this.querySelector('i');
+                if (icon) {
+                    icon.classList.toggle('fa-bars');
+                    icon.classList.toggle('fa-times');
+                }
+            });
+        }
+
+        // --- Custom cursor (desktop only) ---
+        const cursor = document.getElementById('custom-cursor');
+        if (cursor && window.innerWidth >= 1024) {
+            document.addEventListener('mousemove', function(e) {
+                cursor.style.left = e.clientX + 'px';
+                cursor.style.top = e.clientY + 'px';
+            });
+            // Hide cursor when leaving window
+            document.addEventListener('mouseleave', function() {
+                cursor.style.opacity = '0';
+            });
+            document.addEventListener('mouseenter', function() {
+                cursor.style.opacity = '1';
+            });
+            // Scale on hover over interactive elements
+            document.querySelectorAll('a, button, input, .hover-scale').forEach(function(el) {
+                el.addEventListener('mouseenter', function() {
+                    cursor.querySelector('div:first-child').style.transform = 'scale(1.8)';
+                    cursor.querySelector('div:first-child').style.borderColor =
+                        'rgba(59,130,246,0.6)';
+                });
+                el.addEventListener('mouseleave', function() {
+                    cursor.querySelector('div:first-child').style.transform = 'scale(1)';
+                    cursor.querySelector('div:first-child').style.borderColor =
+                        'rgba(255,255,255,0.4)';
+                });
+            });
+        }
+
+        // --- Back to top button ---
+        const backBtn = document.getElementById('back-to-top');
+        if (backBtn) {
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 400) {
+                    backBtn.style.opacity = '1';
+                    backBtn.style.transform = 'scale(1)';
+                    backBtn.style.pointerEvents = 'auto';
+                } else {
+                    backBtn.style.opacity = '0';
+                    backBtn.style.transform = 'scale(0.75)';
+                    backBtn.style.pointerEvents = 'none';
+                }
+            });
+            backBtn.addEventListener('click', function() {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        }
+
+        // --- Animated counters with Intersection Observer ---
+        const counters = document.querySelectorAll('.counter');
+        if (counters.length) {
+            const counterObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const el = entry.target;
+                        const target = parseInt(el.dataset.target) || 0;
+                        let current = 0;
+                        const increment = Math.max(1, Math.ceil(target / 60));
+                        const timer = setInterval(() => {
+                            current += increment;
+                            if (current >= target) {
+                                el.textContent = target + (target > 0 && target % 1 === 0 ?
+                                    '' : '');
+                                clearInterval(timer);
+                            } else {
+                                el.textContent = current;
+                            }
+                        }, 25);
+                        counterObserver.unobserve(el);
+                    }
+                });
+            }, { threshold: 0.3 });
+            counters.forEach(c => counterObserver.observe(c));
+        }
+
+        // --- Smooth anchor scroll ---
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+                if (href === '#') return;
+                const target = document.querySelector(href);
+                if (target) {
+                    e.preventDefault();
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        // --- Loader hide ---
+        const loader = document.getElementById('loader');
+        if (loader) {
+            setTimeout(() => {
+                loader.style.opacity = '0';
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                }, 700);
+            }, 600);
+        }
+
+        // --- Header background on scroll ---
+        const header = document.getElementById('main-header');
+        if (header) {
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 80) {
+                    header.classList.add('bg-black/80', 'backdrop-blur-xl', 'border-b',
+                    'border-white/5');
+                } else {
+                    header.classList.remove('bg-black/80', 'backdrop-blur-xl', 'border-b',
+                        'border-white/5');
+                }
+            });
+        }
+
+        // --- Scroll progress bar ---
+        const progressBar = document.getElementById('scroll-progress');
+        if (progressBar) {
+            window.addEventListener('scroll', function() {
+                const scrollTop = window.scrollY;
+                const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+                const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+                progressBar.style.width = progress + '%';
+            });
+        }
+
+    });
+</script>
+
+</body>
+</html>
