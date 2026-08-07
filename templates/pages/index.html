@@ -1,0 +1,216 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Vanguard Labs – Building Tomorrow's Digital Experiences{% endblock %}
+
+{% block content %}
+
+<!-- ============================================================ -->
+<!-- HERO (overridden)                                            -->
+<!-- ============================================================ -->
+<section class="relative min-h-screen flex items-center overflow-hidden px-4 md:px-8">
+    <canvas id="particles-canvas" class="absolute inset-0 w-full h-full -z-10"></canvas>
+    <div class="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_center,rgba(59,130,246,0.08),transparent_70%)]"></div>
+
+    <div class="max-w-7xl mx-auto w-full py-20 md:py-32">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            <div class="lg:col-span-7 space-y-6 fade-in">
+                <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-medium text-blue-300 tracking-wider uppercase">
+                    <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
+                    Active · Premium
+                </span>
+                <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.1] tracking-tight">
+                    <span class="bg-gradient-to-r from-blue-400 via-violet-400 to-purple-400 bg-clip-text text-transparent hero-title">
+                        Crafting Digital
+                    </span>
+                    <br />
+                    <span class="text-white">Experiences That Matter</span>
+                </h1>
+                <p class="text-base sm:text-lg text-white/70 max-w-lg leading-relaxed">
+                    We design interfaces that combine beauty with functionality, creating seamless experiences that users love and businesses thrive on.
+                </p>
+                <div class="flex flex-wrap gap-4 pt-2">
+                    <a href="{% url 'portfolio:list' %}" class="group relative px-8 py-3.5 rounded-full bg-gradient-to-r from-blue-600 to-violet-600 text-white font-medium transition-all hover:shadow-2xl hover:shadow-blue-500/30 overflow-hidden">
+                        <span class="relative z-10 flex items-center gap-2">View Portfolio <i class="fas fa-arrow-right text-sm group-hover:translate-x-1 transition-transform"></i></span>
+                    </a>
+                    <a href="#" class="group px-8 py-3.5 rounded-full border border-white/20 text-white/80 hover:text-white hover:bg-white/5 transition-all flex items-center gap-2">
+                        <i class="fas fa-play-circle text-blue-400 group-hover:text-blue-300 transition"></i> Watch Showreel
+                    </a>
+                </div>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-6 pt-8">
+                    {% for stat in stats %}
+                    <div class="stat-item">
+                        <div class="text-2xl sm:text-3xl font-bold text-white counter" data-target="{{ stat.value }}">0</div>
+                        <div class="text-xs text-white/50 uppercase tracking-wider">{{ stat.label }}</div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="lg:col-span-5 flex justify-center lg:justify-end">
+                <div class="w-full max-w-md p-6 sm:p-8 rounded-3xl glass border border-white/10 shadow-2xl shadow-blue-500/5 hover:shadow-blue-500/10 transition-shadow duration-500 fade-in">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500/20 to-violet-500/20 flex items-center justify-center border border-white/10">
+                            <i class="fas fa-rocket text-blue-400 text-xl"></i>
+                        </div>
+                        <div><h3 class="font-semibold text-white">Why Vanguard?</h3><p class="text-xs text-white/50">Trusted by industry leaders</p></div>
+                    </div>
+                    <div class="grid grid-cols-3 gap-4 mb-6">
+                        <div class="flex items-center justify-center h-12 rounded-xl bg-white/5 border border-white/5 text-white/40 font-bold text-sm">Command+Z</div>
+                        <div class="flex items-center justify-center h-12 rounded-xl bg-white/5 border border-white/5 text-white/40 font-bold text-sm">Phantom</div>
+                        <div class="flex items-center justify-center h-12 rounded-xl bg-white/5 border border-white/5 text-white/40 font-bold text-sm">Ruby</div>
+                        <div class="flex items-center justify-center h-12 rounded-xl bg-white/5 border border-white/5 text-white/40 font-bold text-sm">Chipset</div>
+                        <div class="flex items-center justify-center h-12 rounded-xl bg-white/5 border border-white/5 text-white/40 font-bold text-sm col-span-1">Acme Corp</div>
+                        <div class="flex items-center justify-center h-12 rounded-xl bg-white/5 border border-white/5 text-white/40 font-bold text-sm">24/7</div>
+                    </div>
+                    <div class="flex items-center gap-2 pt-4 border-t border-white/10">
+                        <div class="flex -space-x-2">
+                            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500/30 to-violet-500/30 border border-white/10 flex items-center justify-center text-xs text-white/60">A</div>
+                            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500/30 to-violet-500/30 border border-white/10 flex items-center justify-center text-xs text-white/60">B</div>
+                            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500/30 to-violet-500/30 border border-white/10 flex items-center justify-center text-xs text-white/60">C</div>
+                        </div>
+                        <span class="text-sm text-white/60">Trusted by <span class="text-white font-medium">50+</span> companies worldwide</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/30 animate-bounce">
+        <span class="text-xs uppercase tracking-widest">Scroll</span>
+        <i class="fas fa-chevron-down text-sm"></i>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SERVICES SECTION                                            -->
+<!-- ============================================================ -->
+<section class="py-20 px-4 md:px-8 bg-gradient-to-b from-black to-gray-900/30">
+    <div class="max-w-7xl mx-auto">
+        <h2 class="text-3xl md:text-4xl font-bold text-center mb-4 fade-in">Our Services</h2>
+        <p class="text-center text-white/60 max-w-2xl mx-auto mb-12 fade-in">We offer a wide range of digital solutions tailored to your needs.</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for service in services %}
+            <div class="glass p-6 rounded-2xl hover:shadow-xl hover:shadow-blue-500/10 transition-all group fade-in">
+                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500/20 to-violet-500/20 flex items-center justify-center mb-4 group-hover:scale-110 transition">
+                    <i class="{{ service.icon }} text-2xl text-blue-400"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-white mb-2">{{ service.name }}</h3>
+                <p class="text-white/50 text-sm">{{ service.short_description|default:service.description|truncatechars:100 }}</p>
+                <a href="{{ service.get_absolute_url }}" class="inline-block mt-4 text-blue-400 hover:text-blue-300 text-sm font-medium transition">Learn More <i class="fas fa-arrow-right ml-1"></i></a>
+            </div>
+            {% empty %}
+            <p class="text-white/50 col-span-full text-center">No services available.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- FEATURED PROJECTS                                            -->
+<!-- ============================================================ -->
+<section class="py-20 px-4 md:px-8">
+    <div class="max-w-7xl mx-auto">
+        <h2 class="text-3xl md:text-4xl font-bold text-center mb-4 fade-in">Featured Projects</h2>
+        <p class="text-center text-white/60 max-w-2xl mx-auto mb-12 fade-in">Some of our best work.</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for project in featured_projects %}
+            <a href="{{ project.get_absolute_url }}" class="group relative rounded-2xl overflow-hidden glass hover:shadow-2xl hover:shadow-blue-500/10 transition-all fade-in">
+                <img src="{{ project.cover_image.url }}" alt="{{ project.title }}" class="w-full h-48 object-cover group-hover:scale-105 transition duration-500" loading="lazy" />
+                <div class="p-4">
+                    <h3 class="text-lg font-semibold text-white">{{ project.title }}</h3>
+                    <p class="text-sm text-white/50">{{ project.client }}</p>
+                    <span class="inline-block mt-2 text-xs px-3 py-1 rounded-full bg-blue-500/20 text-blue-300">{{ project.category.name }}</span>
+                </div>
+            </a>
+            {% empty %}
+            <p class="text-white/50 col-span-full text-center">No projects yet.</p>
+            {% endfor %}
+        </div>
+        <div class="text-center mt-10">
+            <a href="{% url 'portfolio:list' %}" class="inline-block px-8 py-3 rounded-full border border-white/20 text-white/80 hover:text-white hover:bg-white/5 transition">View All Projects</a>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- TEAM MEMBERS                                                -->
+<!-- ============================================================ -->
+<section class="py-20 px-4 md:px-8 bg-gradient-to-t from-black to-gray-900/20">
+    <div class="max-w-7xl mx-auto">
+        <h2 class="text-3xl md:text-4xl font-bold text-center mb-4 fade-in">Meet the Crew</h2>
+        <p class="text-center text-white/60 max-w-2xl mx-auto mb-12 fade-in">The talented people behind Vanguard Labs.</p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {% for member in team %}
+            <div class="glass p-4 rounded-2xl text-center hover:shadow-xl hover:shadow-blue-500/10 transition-all group fade-in">
+                <img src="{{ member.photo.url }}" alt="{{ member.name }}" class="w-24 h-24 rounded-full mx-auto mb-3 object-cover border-2 border-white/10 group-hover:border-blue-400 transition" loading="lazy" />
+                <h3 class="text-lg font-semibold text-white">{{ member.name }}</h3>
+                <p class="text-sm text-blue-400">{{ member.role.name }}</p>
+                <p class="text-xs text-white/50 mt-1">{{ member.experience }} years exp.</p>
+                <div class="flex justify-center gap-2 mt-3">
+                    {% if member.github %}<a href="{{ member.github }}" class="text-white/30 hover:text-white transition"><i class="fab fa-github"></i></a>{% endif %}
+                    {% if member.linkedin %}<a href="{{ member.linkedin }}" class="text-white/30 hover:text-white transition"><i class="fab fa-linkedin-in"></i></a>{% endif %}
+                    {% if member.twitter %}<a href="{{ member.twitter }}" class="text-white/30 hover:text-white transition"><i class="fab fa-twitter"></i></a>{% endif %}
+                </div>
+            </div>
+            {% empty %}
+            <p class="text-white/50 col-span-full text-center">Team members coming soon.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- TESTIMONIALS                                                -->
+<!-- ============================================================ -->
+<section class="py-20 px-4 md:px-8">
+    <div class="max-w-7xl mx-auto">
+        <h2 class="text-3xl md:text-4xl font-bold text-center mb-4 fade-in">What Our Clients Say</h2>
+        <p class="text-center text-white/60 max-w-2xl mx-auto mb-12 fade-in">Real feedback from real partnerships.</p>
+        <div class="carousel-container" data-autoplay="true" data-interval="6000">
+            <div class="carousel-track">
+                {% for testimonial in testimonials %}
+                <div class="carousel-item glass p-6 md:p-8 rounded-2xl max-w-3xl mx-auto">
+                    <div class="flex items-center gap-4 mb-4">
+                        <img src="{{ testimonial.client_photo.url }}" alt="{{ testimonial.client_name }}" class="w-14 h-14 rounded-full object-cover" loading="lazy" />
+                        <div>
+                            <h4 class="text-lg font-semibold text-white">{{ testimonial.client_name }}</h4>
+                            <p class="text-sm text-white/50">{{ testimonial.client_company }}</p>
+                        </div>
+                    </div>
+                    <p class="text-white/80 italic">"{{ testimonial.content }}"</p>
+                    <div class="flex text-yellow-400 mt-3">
+                        {% for i in "12345"|slice:":testimonial.rating" %}
+                        <i class="fas fa-star text-sm"></i>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% empty %}
+                <p class="text-white/50 text-center">No testimonials yet.</p>
+                {% endfor %}
+            </div>
+            <button class="carousel-btn prev"><i class="fas fa-chevron-left"></i></button>
+            <button class="carousel-btn next"><i class="fas fa-chevron-right"></i></button>
+            <div class="carousel-dots"></div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- FAQ (optional)                                              -->
+<!-- ============================================================ -->
+{% if faqs %}
+<section class="py-20 px-4 md:px-8 bg-gradient-to-b from-black to-gray-900/30">
+    <div class="max-w-3xl mx-auto">
+        <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 fade-in">Frequently Asked Questions</h2>
+        <div class="space-y-4">
+            {% for faq in faqs %}
+            <div class="glass p-6 rounded-2xl fade-in">
+                <h3 class="text-lg font-semibold text-white">{{ faq.question }}</h3>
+                <p class="text-white/60 mt-2">{{ faq.answer }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+{% endblock %}
