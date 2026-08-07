@@ -8,6 +8,21 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Lead, Opportunity, Interaction, Task, Note
 from .forms import LeadForm, InteractionForm, TaskForm, NoteForm, OpportunityForm
 
+@login_required
+def crm_dashboard(request):
+    """Simple CRM dashboard with stats."""
+    context = {
+        'total_leads': Lead.objects.count(),
+        'new_leads': Lead.objects.filter(status='new').count(),
+        'won_leads': Lead.objects.filter(status='won').count(),
+        'lost_leads': Lead.objects.filter(status='lost').count(),
+        'my_tasks': Task.objects.filter(assigned_to=request.user, completed=False).count(),
+        'recent_interactions': Interaction.objects.filter(user=request.user).order_by('-date')[:5],
+        'opportunities_by_stage': Opportunity.objects.values('stage').annotate(count=Count('id')),
+        'lead_status_counts': Lead.objects.values('status').annotate(count=Count('id')),
+    }
+    return render(request, 'crm/dashboard.html', context)
+
 class LeadListView(LoginRequiredMixin, ListView):
     model = Lead
     template_name = 'crm/lead_list.html'
