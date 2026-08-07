@@ -10,13 +10,13 @@ app_name = 'crm'
 
 urlpatterns = [
     # Leads
-    path('leads/', LeadListView.as_view(), name='lead_list'),
+    path('leads/', LeadListView.as_view(), name='lead_list'), 
     path('leads/create/', LeadCreateView.as_view(), name='lead_create'),
     path('leads/<int:pk>/', LeadDetailView.as_view(), name='lead_detail'),
     path('leads/<int:pk>/update/', LeadUpdateView.as_view(), name='lead_update'),
     path('leads/<int:pk>/delete/', LeadDeleteView.as_view(), name='lead_delete'),
     path('leads/<int:pk>/convert/', LeadConvertView.as_view(), name='lead_convert'),
-
+    path('dashboard/', crm_dashboard, name='dashboard')
     # Tasks
     path('tasks/', TaskListView.as_view(), name='task_list'),
     path('tasks/create/', TaskCreateView.as_view(), name='task_create'),
