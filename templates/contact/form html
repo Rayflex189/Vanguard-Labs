@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Contact Us – Vanguard Labs{% endblock %}
+
+{% block content %}
+<section class="py-20 px-4 md:px-8">
+    <div class="max-w-3xl mx-auto">
+        <h1 class="text-4xl md:text-5xl font-bold text-center mb-4 fade-in">Get in Touch</h1>
+        <p class="text-center text-white/60 max-w-2xl mx-auto mb-8 fade-in">We'd love to hear about your project. Fill out the form and we'll get back to you within 24 hours.</p>
+
+        <div class="glass p-8 md:p-12 rounded-3xl fade-in">
+            <form method="post" enctype="multipart/form-data" class="space-y-6">
+                {% csrf_token %}
+                {{ form.honeypot }}
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="{{ form.name.id_for_label }}" class="block text-sm font-medium text-white/60 mb-1">Name *</label>
+                        {{ form.name }}
+                    </div>
+                    <div>
+                        <label for="{{ form.email.id_for_label }}" class="block text-sm font-medium text-white/60 mb-1">Email *</label>
+                        {{ form.email }}
+                    </div>
+                    <div>
+                        <label for="{{ form.phone.id_for_label }}" class="block text-sm font-medium text-white/60 mb-1">Phone</label>
+                        {{ form.phone }}
+                    </div>
+                    <div>
+                        <label for="{{ form.company.id_for_label }}" class="block text-sm font-medium text-white/60 mb-1">Company</label>
+                        {{ form.company }}
+                    </div>
+                </div>
+                <div>
+                    <label for="{{ form.subject.id_for_label }}" class="block text-sm font-medium text-white/60 mb-1">Subject</label>
+                    {{ form.subject }}
+                </div>
+                <div>
+                    <label for="{{ form.category.id_for_label }}" class="block text-sm font-medium text-white/60 mb-1">Category</label>
+                    {{ form.category }}
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label for="{{ form.service_interest.id_for_label }}" class="block text-sm font-medium text-white/60 mb-1">Service Interest</label>
+                        {{ form.service_interest }}
+                    </div>
+                    <div>
+                        <label for="{{ form.project_budget.id_for_label }}" class="block text-sm font-medium text-white/60 mb-1">Budget</label>
+                        {{ form.project_budget }}
+                    </div>
+                    <div>
+                        <label for="{{ form.timeline.id_for_label }}" class="block text-sm font-medium text-white/60 mb-1">Timeline</label>
+                        {{ form.timeline }}
+                    </div>
+                </div>
+                <div>
+                    <label for="{{ form.message.id_for_label }}" class="block text-sm font-medium text-white/60 mb-1">Message *</label>
+                    {{ form.message }}
+                </div>
+                <div>
+                    <label for="{{ form.attachment.id_for_label }}" class="block text-sm font-medium text-white/60 mb-1">Attachment</label>
+                    {{ form.attachment }}
+                    <p class="text-xs text-white/30 mt-1">Accepted: PDF, DOC, DOCX, JPG, PNG, ZIP (max 10MB)</p>
+                </div>
+                <button type="submit" class="w-full py-3 rounded-full bg-gradient-to-r from-blue-600 to-violet-600 text-white font-medium hover:shadow-lg hover:shadow-blue-500/30 transition">Send Message</button>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}
