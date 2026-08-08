@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Tasks – Vanguard Labs{% endblock %}
+
+{% block content %}
+<section class="py-20 px-4 md:px-8">
+  <div class="max-w-6xl mx-auto">
+    <h1 class="text-4xl font-bold text-white mb-8">Tasks</h1>
+    <div class="flex flex-wrap gap-4 items-center mb-8">
+      <a href="{% url 'crm:task_list' %}" class="px-4 py-2 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-sm transition">All</a>
+      <a href="?mine=1" class="px-4 py-2 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-sm transition">Mine</a>
+      <a href="?incomplete=1" class="px-4 py-2 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-sm transition">Incomplete</a>
+    </div>
+    <div class="overflow-x-auto glass rounded-2xl">
+      <table class="w-full text-left">
+        <thead class="border-b border-white/10">
+          <tr class="text-white/40 text-sm uppercase">
+            <th class="p-4">Title</th>
+            <th class="p-4">Project/Lead</th>
+            <th class="p-4">Assigned</th>
+            <th class="p-4">Due</th>
+            <th class="p-4">Status</th>
+            <th class="p-4">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for task in tasks %}
+          <tr class="border-b border-white/5 hover:bg-white/5 transition">
+            <td class="p-4 text-white">{{ task.title }}</td>
+            <td class="p-4 text-white/60">
+              {% if task.lead %}<a href="{% url 'crm:lead_detail' task.lead.pk %}" class="text-blue-400">{{ task.lead.get_full_name }}</a>{% elif task.client %}{{ task.client.name }}{% else %}—{% endif %}
+            </td>
+            <td class="p-4 text-white/60">{{ task.assigned_to.username|default:"Unassigned" }}</td>
+            <td class="p-4 text-white/60">{{ task.due_date|date:"M d"|default:"-" }}</td>
+            <td class="p-4"><span class="px-3 py-1 rounded-full text-xs {% if task.status == 'completed' %}bg-green-500/20 text-green-300{% elif task.status == 'in_progress' %}bg-blue-500/20 text-blue-300{% elif task.status == 'blocked' %}bg-red-500/20 text-red-300{% else %}bg-white/5 text-white/60{% endif %}">{{ task.get_status_display }}</span></td>
+            <td class="p-4 flex gap-2">
+              <a href="{% url 'crm:task_update' task.pk %}" class="text-white/40 hover:text-white transition"><i class="fas fa-edit"></i></a>
+              <a href="{% url 'crm:task_delete' task.pk %}" class="text-white/40 hover:text-red-400 transition"><i class="fas fa-trash"></i></a>
+            </td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="6" class="p-8 text-center text-white/40">No tasks found.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+{% endblock %}
