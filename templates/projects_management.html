@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Project Dashboard – Vanguard Labs{% endblock %}
+
+{% block content %}
+<section class="py-20 px-4 md:px-8">
+  <div class="max-w-7xl mx-auto">
+    <h1 class="text-4xl font-bold text-white mb-8">Project Dashboard</h1>
+
+    <!-- Stats -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+      <div class="glass p-6 rounded-2xl text-center fade-in">
+        <p class="text-3xl font-bold text-white">{{ total_projects }}</p>
+        <p class="text-sm text-white/50">Total Projects</p>
+      </div>
+      <div class="glass p-6 rounded-2xl text-center fade-in">
+        <p class="text-3xl font-bold text-blue-400">{{ active_projects }}</p>
+        <p class="text-sm text-white/50">Active</p>
+      </div>
+      <div class="glass p-6 rounded-2xl text-center fade-in">
+        <p class="text-3xl font-bold text-green-400">{{ completed_projects }}</p>
+        <p class="text-sm text-white/50">Completed</p>
+      </div>
+      <div class="glass p-6 rounded-2xl text-center fade-in">
+        <p class="text-3xl font-bold text-violet-400">{{ total_tasks }}</p>
+        <p class="text-sm text-white/50">Total Tasks</p>
+      </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="glass p-6 rounded-2xl">
+      <h2 class="text-xl font-semibold text-white mb-4">Recent Activity</h2>
+      {% if recent_activities %}
+        <div class="space-y-3">
+          {% for act in recent_activities %}
+            <div class="flex items-center gap-3 text-sm border-b border-white/5 pb-3 last:border-0">
+              <span class="text-white/60">{{ act.user.username }}</span>
+              <span class="text-white/40">{{ act.action }}</span>
+              <span class="text-white/30 text-xs ml-auto">{{ act.created_at|timesince }} ago</span>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p class="text-white/40">No recent activity.</p>
+      {% endif %}
+    </div>
+
+    <!-- Quick actions -->
+    <div class="mt-8 flex flex-wrap gap-4">
+      <a href="{% url 'projects_management:project_create' %}" class="px-6 py-3 rounded-full bg-gradient-to-r from-blue-600 to-violet-600 text-white font-medium hover:shadow-lg transition">New Project</a>
+      <a href="{% url 'projects_management:project_list' %}" class="px-6 py-3 rounded-full border border-white/20 text-white/80 hover:bg-white/5 transition">View All Projects</a>
+    </div>
+  </div>
+</section>
+{% endblock %}
