@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Proposals – Vanguard Labs{% endblock %}
+
+{% block content %}
+<section class="py-20 px-4 md:px-8">
+  <div class="max-w-7xl mx-auto">
+    <div class="flex flex-wrap items-center justify-between gap-4 mb-8">
+      <div>
+        <h1 class="text-4xl font-bold text-white">Proposals</h1>
+        <p class="text-white/50">Manage your proposals</p>
+      </div>
+      <a href="{% url 'proposals:create' %}" class="px-6 py-2.5 rounded-full bg-gradient-to-r from-blue-600 to-violet-600 text-white font-medium hover:shadow-lg transition">
+        <i class="fas fa-plus mr-2"></i>New Proposal
+      </a>
+    </div>
+
+    <!-- Status filter -->
+    <div class="flex flex-wrap gap-2 mb-8">
+      <a href="{% url 'proposals:list' %}" class="px-4 py-2 rounded-full {% if not request.resolver_match.kwargs.status_slug %}bg-white/20{% else %}bg-white/5 hover:bg-white/10{% endif %} border border-white/10 text-sm transition">All</a>
+      {% for status in statuses %}
+        <a href="{% url 'proposals:status' status.slug %}" class="px-4 py-2 rounded-full {% if request.resolver_match.kwargs.status_slug == status.slug %}bg-white/20{% else %}bg-white/5 hover:bg-white/10{% endif %} border border-white/10 text-sm transition">{{ status.name }}</a>
+      {% endfor %}
+    </div>
+
+    <!-- Table -->
+    <div class="overflow-x-auto glass rounded-2xl">
+      <table class="w-full text-left">
+        <thead class="border-b border-white/10">
+          <tr class="text-white/40 text-sm uppercase">
+            <th class="p-4">Number</th>
+            <th class="p-4">Title</th>
+            <th class="p-4">Client</th>
+            <th class="p-4">Status</th>
+            <th class="p-4">Total</th>
+            <th class="p-4">Created</th>
+            <th class="p-4">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for proposal in proposals %}
+          <tr class="border-b border-white/5 hover:bg-white/5 transition">
+            <td class="p-4 text-white/60">{{ proposal.proposal_number }}</td>
+            <td class="p-4"><a href="{% url 'proposals:detail' proposal.slug %}" class="text-white hover:text-blue-400 transition">{{ proposal.title }}</a></td>
+            <td class="p-4 text-white/60">{{ proposal.client.name|default:"-" }}</td>
+            <td class="p-4"><span class="px-3 py-1 rounded-full text-xs" style="background:{{ proposal.status.color }}20; color:{{ proposal.status.color }}">{{ proposal.status.name }}</span></td>
+            <td class="p-4 text-white/60">${{ proposal.total }}</td>
+            <td class="p-4 text-white/40 text-sm">{{ proposal.created_at|date:"M d, Y" }}</td>
+            <td class="p-4 flex gap-2">
+              <a href="{% url 'proposals:detail' proposal.slug %}" class="text-white/40 hover:text-white transition"><i class="fas fa-eye"></i></a>
+              <a href="{% url 'proposals:update' proposal.slug %}" class="text-white/40 hover:text-white transition"><i class="fas fa-edit"></i></a>
+              <a href="{% url 'proposals:delete' proposal.slug %}" class="text-white/40 hover:text-red-400 transition"><i class="fas fa-trash"></i></a>
+            </td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="7" class="p-8 text-center text-white/40">No proposals found.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+{% endblock %}
