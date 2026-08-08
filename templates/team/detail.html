@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ member.name }} – Vanguard Labs{% endblock %}
+
+{% block content %}
+<section class="py-20 px-4 md:px-8">
+    <div class="max-w-4xl mx-auto">
+        <div class="glass p-8 md:p-12 rounded-3xl">
+            <div class="flex flex-col md:flex-row gap-8 items-center md:items-start">
+                <img src="{{ member.photo.url }}" alt="{{ member.name }}" class="w-40 h-40 rounded-full object-cover border-2 border-white/10" loading="lazy" />
+                <div>
+                    <h1 class="text-3xl md:text-4xl font-bold text-white">{{ member.name }}</h1>
+                    <p class="text-xl text-blue-400">{{ member.role.name }}</p>
+                    <p class="text-white/60">{{ member.experience }} years of experience</p>
+                    <div class="flex flex-wrap gap-2 mt-4">
+                        {% if member.github %}<a href="{{ member.github }}" class="text-white/30 hover:text-white transition"><i class="fab fa-github"></i></a>{% endif %}
+                        {% if member.linkedin %}<a href="{{ member.linkedin }}" class="text-white/30 hover:text-white transition"><i class="fab fa-linkedin-in"></i></a>{% endif %}
+                        {% if member.twitter %}<a href="{{ member.twitter }}" class="text-white/30 hover:text-white transition"><i class="fab fa-twitter"></i></a>{% endif %}
+                        {% if member.website %}<a href="{{ member.website }}" class="text-white/30 hover:text-white transition"><i class="fas fa-globe"></i></a>{% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="mt-8">
+                <h2 class="text-2xl font-bold text-white mb-4">Biography</h2>
+                <p class="text-white/70 leading-relaxed">{{ member.bio|linebreaks }}</p>
+            </div>
+            <div class="mt-8">
+                <h3 class="text-xl font-bold text-white mb-2">Skills</h3>
+                <div class="flex flex-wrap gap-2">
+                    {% for skill in member.get_skills_list %}
+                    <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-sm text-white/60">{{ skill }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+            {% if member.education %}
+            <div class="mt-8">
+                <h3 class="text-xl font-bold text-white mb-2">Education</h3>
+                <p class="text-white/70">{{ member.education|linebreaks }}</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}
