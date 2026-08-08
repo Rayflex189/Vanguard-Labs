@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ notification.title }} – Vanguard Labs{% endblock %}
+
+{% block content %}
+<section class="py-20 px-4 md:px-8">
+  <div class="max-w-2xl mx-auto">
+    <div class="glass p-8 rounded-3xl fade-in">
+      <div class="flex justify-between items-start">
+        <div>
+          <p class="text-xs text-white/30">{{ notification.created_at|date:"F d, Y H:i" }}</p>
+          <h1 class="text-2xl font-bold text-white mt-1">{{ notification.title }}</h1>
+        </div>
+        <a href="{% url 'notifications:list' %}" class="text-white/40 hover:text-white transition"><i class="fas fa-arrow-left"></i> Back</a>
+      </div>
+      <div class="mt-6 prose prose-invert max-w-none">
+        <p class="text-white/80">{{ notification.message|linebreaks }}</p>
+      </div>
+      {% if notification.link %}
+        <div class="mt-6">
+          <a href="{{ notification.link }}" class="px-6 py-2 rounded-full bg-gradient-to-r from-blue-600 to-violet-600 text-white font-medium hover:shadow-lg transition">
+            {{ notification.link_text|default:"Go to link" }}
+          </a>
+        </div>
+      {% endif %}
+      {% if notification.action_status == 'pending' %}
+        <div class="mt-6 flex gap-4">
+          <a href="{% url 'notifications:action' notification.pk 'accepted' %}" class="px-6 py-2 rounded-full bg-green-600 text-white hover:bg-green-700 transition">Accept</a>
+          <a href="{% url 'notifications:action' notification.pk 'rejected' %}" class="px-6 py-2 rounded-full bg-red-600 text-white hover:bg-red-700 transition">Reject</a>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endblock %}
