@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Testimonials – Vanguard Labs{% endblock %}
+
+{% block content %}
+<section class="py-20 px-4 md:px-8">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-4xl md:text-5xl font-bold text-center mb-4 fade-in">What Our Clients Say</h1>
+        <p class="text-center text-white/60 max-w-2xl mx-auto mb-12 fade-in">Real feedback from people we've worked with.</p>
+
+        <div class="space-y-6">
+            {% for testimonial in testimonials %}
+            <div class="glass p-6 md:p-8 rounded-2xl fade-in">
+                <div class="flex items-center gap-4">
+                    <img src="{{ testimonial.client_photo.url }}" alt="{{ testimonial.client_name }}" class="w-14 h-14 rounded-full object-cover" loading="lazy" />
+                    <div>
+                        <h3 class="text-lg font-semibold text-white">{{ testimonial.client_name }}</h3>
+                        <p class="text-sm text-white/50">{{ testimonial.client_company }}</p>
+                    </div>
+                </div>
+                <div class="mt-4 text-white/80 italic">"{{ testimonial.content }}"</div>
+                <div class="flex text-yellow-400 mt-3">
+                    {% for i in "12345"|slice:":testimonial.rating" %}
+                    <i class="fas fa-star text-sm"></i>
+                    {% endfor %}
+                </div>
+            </div>
+            {% empty %}
+            <p class="text-white/50 text-center">No testimonials yet.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}
