@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Our Team – Vanguard Labs{% endblock %}
+
+{% block content %}
+<section class="py-20 px-4 md:px-8">
+    <div class="max-w-7xl mx-auto">
+        <h1 class="text-4xl md:text-5xl font-bold text-center mb-4 fade-in">Meet the Team</h1>
+        <p class="text-center text-white/60 max-w-2xl mx-auto mb-8 fade-in">The people behind the magic.</p>
+
+        <div class="flex flex-wrap justify-center gap-2 mb-10">
+            <a href="{% url 'team:list' %}" class="px-4 py-2 rounded-full bg-white/5 border border-white/10 text-sm hover:bg-white/10 transition">All</a>
+            {% for role in roles %}
+            <a href="{% url 'team:role' role.slug %}" class="px-4 py-2 rounded-full bg-white/5 border border-white/10 text-sm hover:bg-white/10 transition">{{ role.name }}</a>
+            {% endfor %}
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {% for member in members %}
+            <div class="glass p-6 rounded-2xl text-center hover:shadow-xl hover:shadow-blue-500/10 transition-all group fade-in">
+                <img src="{{ member.photo.url }}" alt="{{ member.name }}" class="w-28 h-28 rounded-full mx-auto mb-4 object-cover border-2 border-white/10 group-hover:border-blue-400 transition" loading="lazy" />
+                <h3 class="text-xl font-semibold text-white">{{ member.name }}</h3>
+                <p class="text-blue-400 text-sm">{{ member.role.name }}</p>
+                <p class="text-white/50 text-sm mt-2">{{ member.short_bio|default:member.bio|truncatechars:80 }}</p>
+                <a href="{{ member.get_absolute_url }}" class="inline-block mt-4 text-blue-400 hover:text-blue-300 text-sm transition">View Profile</a>
+            </div>
+            {% empty %}
+            <p class="text-white/50 col-span-full text-center">No team members found.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}
