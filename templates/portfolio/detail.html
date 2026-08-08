@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ project.title }} – Vanguard Labs{% endblock %}
+{% block meta_description %}{{ project.meta_description|default:project.description|truncatechars:160 }}{% endblock %}
+
+{% block content %}
+<article class="py-20 px-4 md:px-8">
+    <div class="max-w-6xl mx-auto">
+        <!-- Hero -->
+        <div class="relative rounded-2xl overflow-hidden mb-12">
+            <img src="{{ project.cover_image.url }}" alt="{{ project.title }}" class="w-full h-64 md:h-96 object-cover" loading="lazy" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-end p-6 md:p-10">
+                <div>
+                    <h1 class="text-3xl md:text-5xl font-bold text-white">{{ project.title }}</h1>
+                    <p class="text-white/70 text-lg">{{ project.client }}</p>
+                    <div class="flex flex-wrap gap-2 mt-3">
+                        <span class="px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 text-sm">{{ project.category.name }}</span>
+                        {% for tech in project.technologies.all %}
+                        <span class="px-3 py-1 rounded-full bg-white/10 text-white/60 text-sm">{{ tech.name }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Overview -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+            <div class="lg:col-span-2 space-y-6">
+                <h2 class="text-2xl font-bold text-white">Overview</h2>
+                <p class="text-white/70 leading-relaxed">{{ project.description }}</p>
+                {% if project.problem_statement %}
+                <div class="glass p-6 rounded-2xl">
+                    <h3 class="text-xl font-semibold text-white">Problem</h3>
+                    <p class="text-white/70 mt-2">{{ project.problem_statement }}</p>
+                </div>
+                {% endif %}
+                {% if project.solution %}
+                <div class="glass p-6 rounded-2xl">
+                    <h3 class="text-xl font-semibold text-white">Solution</h3>
+                    <p class="text-white/70 mt-2">{{ project.solution }}</p>
+                </div>
+                {% endif %}
+                {% if project.process %}
+                <div class="glass p-6 rounded-2xl">
+                    <h3 class="text-xl font-semibold text-white">Process</h3>
+                    <p class="text-white/70 mt-2">{{ project.process }}</p>
+                </div>
+                {% endif %}
+                {% if project.results %}
+                <div class="glass p-6 rounded-2xl">
+                    <h3 class="text-xl font-semibold text-white">Results</h3>
+                    <p class="text-white/70 mt-2">{{ project.results }}</p>
+                </div>
+                {% endif %}
+            </div>
+            <div class="space-y-6">
+                <div class="glass p-6 rounded-2xl">
+                    <h3 class="text-lg font-semibold text-white mb-3">Project Details</h3>
+                    <ul class="space-y-2 text-sm text-white/60">
+                        <li><span class="text-white/40">Client:</span> {{ project.client }}</li>
+                        <li><span class="text-white/40">Category:</span> {{ project.category.name }}</li>
+                        <li><span class="text-white/40">Completion:</span> {{ project.completion_date|date:"F Y" }}</li>
+                        <li><span class="text-white/40">Duration:</span> {{ project.duration|default:"N/A" }}</li>
+                        <li><span class="text-white/40">Technologies:</span> {{ project.technologies.all|join:", " }}</li>
+                    </ul>
+                    <div class="mt-4 flex flex-wrap gap-3">
+                        {% if project.live_demo_url %}<a href="{{ project.live_demo_url }}" target="_blank" class="px-4 py-2 rounded-full bg-blue-600 text-white text-sm hover:bg-blue-700 transition">Live Demo</a>{% endif %}
+                        {% if project.github_url %}<a href="{{ project.github_url }}" target="_blank" class="px-4 py-2 rounded-full border border-white/20 text-white/80 text-sm hover:bg-white/5 transition">GitHub</a>{% endif %}
+                    </div>
+                </div>
+                {% if project.team_members.exists %}
+                <div class="glass p-6 rounded-2xl">
+                    <h3 class="text-lg font-semibold text-white mb-3">Team</h3>
+                    <div class="flex flex-wrap gap-2">
+                        {% for member in project.team_members.all %}
+                        <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-sm text-white/60">{{ member.name }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Gallery -->
+        {% if project.gallery_images.exists %}
+        <div class="mb-12">
+            <h2 class="text-2xl font-bold text-white mb-6">Gallery</h2>
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                {% for img in project.gallery_images.all %}
+                <img src="{{ img.image.url }}" alt="{{ img.caption|default:project.title }}" class="rounded-xl w-full h-48 object-cover hover:scale-105 transition duration-300" loading="lazy" />
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Related Projects -->
+        {% if related_projects %}
+        <div>
+            <h2 class="text-2xl font-bold text-white mb-6">Related Projects</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {% for rel in related_projects %}
+                <a href="{{ rel.get_absolute_url }}" class="glass rounded-2xl overflow-hidden hover:shadow-xl hover:shadow-blue-500/10 transition">
+                    <img src="{{ rel.cover_image.url }}" alt="{{ rel.title }}" class="w-full h-40 object-cover" loading="lazy" />
+                    <div class="p-4">
+                        <h4 class="text-white font-semibold">{{ rel.title }}</h4>
+                        <p class="text-white/50 text-sm">{{ rel.client }}</p>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</article>
+{% endblock %}
