@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ project.name }} – Vanguard Labs{% endblock %}
+
+{% block content %}
+<section class="py-20 px-4 md:px-8">
+  <div class="max-w-6xl mx-auto">
+    <div class="flex flex-wrap items-center justify-between gap-4 mb-8">
+      <div>
+        <h1 class="text-4xl font-bold text-white">{{ project.name }}</h1>
+        <p class="text-white/50">{{ project.client.name|default:"No client" }}</p>
+      </div>
+      <div class="flex gap-3">
+        <a href="{% url 'projects_management:project_update' project.slug %}" class="px-4 py-2 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 transition">Edit</a>
+        <a href="{% url 'projects_management:project_delete' project.slug %}" class="px-4 py-2 rounded-full bg-red-500/20 border border-red-500/20 text-red-400 hover:bg-red-500/30 transition">Delete</a>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <!-- Main -->
+      <div class="lg:col-span-2 space-y-6">
+        <div class="glass p-6 rounded-2xl">
+          <h2 class="text-xl font-semibold text-white mb-3">Overview</h2>
+          <p class="text-white/70">{{ project.description|default:"No description." }}</p>
+          <div class="grid grid-cols-2 gap-3 mt-4 text-sm text-white/60">
+            <div><span class="text-white/40">Status:</span> {{ project.get_status_display }}</div>
+            <div><span class="text-white/40">Priority:</span> {{ project.get_priority_display }}</div>
+            <div><span class="text-white/40">Start:</span> {{ project.start_date|date:"M d, Y"|default:"-" }}</div>
+            <div><span class="text-white/40">End:</span> {{ project.end_date|date:"M d, Y"|default:"-" }}</div>
+            <div><span class="text-white/40">Budget:</span> ${{ project.budget|default:"0" }}</div>
+            <div><span class="text-white/40">Est. Hours:</span> {{ project.estimated_hours|default:"-" }}</div>
+          </div>
+        </div>
+
+        <!-- Milestones -->
+        <div class="glass p-6 rounded-2xl">
+          <h2 class="text-xl font-semibold text-white mb-3">Milestones</h2>
+          {% if project.milestones.all %}
+            <div class="space-y-3">
+              {% for ms in project.milestones.all %}
+                <div class="flex items-center gap-3 p-3 glass-light rounded-xl">
+                  <input type="checkbox" {% if ms.is_completed %}checked{% endif %} disabled class="accent-blue-500" />
+                  <div class="flex-1">
+                    <p class="text-white {% if ms.is_completed %}line-through text-white/40{% endif %}">{{ ms.name }}</p>
+                    <p class="text-xs text-white/30">{{ ms.due_date|date:"M d, Y" }}</p>
+                  </div>
+                  <span class="text-xs text-white/30">{{ ms.tasks.count }} tasks</span>
+                </div>
+              {% endfor %}
+            </div>
+          {% else %}
+            <p class="text-white/40">No milestones.</p>
+          {% endif %}
+        </div>
+
+        <!-- Tasks -->
+        <div class="glass p-6 rounded-2xl">
+          <div class="flex justify-between items-center">
+            <h2 class="text-xl font-semibold text-white">Tasks</h2>
+            <a href="{% url 'projects_management:task_create' project.slug %}" class="text-blue-400 hover:text-blue-300 text-sm transition">Add Task <i class="fas fa-plus ml-1"></i></a>
+          </div>
+          <div class="space-y-2 mt-4">
+            {% for task in project.tasks.all|slice:":10" %}
+              <div class="flex items-center gap-3 p-3 glass-light rounded-xl">
+                <input type="checkbox" {% if task.status == 'completed' %}checked{% endif %} disabled class="accent-blue-500" />
+                <div class="flex-1">
+                  <p class="text-white {% if task.status == 'completed' %}line-through text-white/40{% endif %}">{{ task.title }}</p>
+                  <p class="text-xs text-white/30">Assigned: {{ task.assigned_to.name|default:"-" }} | Due: {{ task.due_date|date:"M d"|default:"-" }}</p>
+                </div>
+                <span class="text-xs px-2 py-1 rounded-full {% if task.status == 'completed' %}bg-green-500/20 text-green-300{% elif task.status == 'in_progress' %}bg-blue-500/20 text-blue-300{% else %}bg-white/5 text-white/60{% endif %}">
+                  {{ task.get_status_display }}
+                </span>
+              </div>
+            {% empty %}
+              <p class="text-white/40">No tasks.</p>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="space-y-6">
+        <div class="glass p-6 rounded-2xl">
+          <h3 class="text-lg font-semibold text-white mb-3">Team</h3>
+          <div class="flex flex-wrap gap-2">
+            {% for member in project.team_members.all %}
+              <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-sm text-white/60">{{ member.name }}</span>
+            {% empty %}
+              <p class="text-white/40 text-sm">No team members.</p>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="glass p-6 rounded-2xl">
+          <h3 class="text-lg font-semibold text-white mb-3">Comments</h3>
+          <div class="space-y-2">
+            {% for comment in project.comments.all|slice:":5" %}
+              <div class="glass-light p-3 rounded-xl">
+                <p class="text-sm text-white/80">{{ comment.content|truncatechars:60 }}</p>
+                <p class="text-xs text-white/30">{{ comment.user.username }} - {{ comment.created_at|timesince }} ago</p>
+              </div>
+            {% empty %}
+              <p class="text-white/40 text-sm">No comments.</p>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="glass p-6 rounded-2xl">
+          <h3 class="text-lg font-semibold text-white mb-3">Time Logs</h3>
+          <div class="space-y-1">
+            {% for log in project.time_logs.all|slice:":5" %}
+              <div class="flex justify-between text-sm">
+                <span class="text-white/60">{{ log.user.username }}</span>
+                <span class="text-white/40">{{ log.hours }}h</span>
+              </div>
+            {% empty %}
+              <p class="text-white/40 text-sm">No time logged.</p>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
