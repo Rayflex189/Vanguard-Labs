@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Messages – Vanguard Labs{% endblock %}
+
+{% block content %}
+<section class="py-20 px-4 md:px-8">
+  <div class="max-w-4xl mx-auto">
+    <div class="flex items-center justify-between mb-8">
+      <h1 class="text-4xl font-bold text-white">Messages</h1>
+      <a href="{% url 'messaging:create' %}" class="px-6 py-2.5 rounded-full bg-gradient-to-r from-blue-600 to-violet-600 text-white font-medium hover:shadow-lg transition">
+        <i class="fas fa-plus mr-2"></i>New Conversation
+      </a>
+    </div>
+
+    <div class="space-y-3">
+      {% for conv in conversations %}
+        <a href="{% url 'messaging:detail' conv.pk %}" class="block glass p-4 rounded-2xl hover:shadow-xl hover:shadow-blue-500/10 transition group">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-4">
+              <div class="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500/30 to-violet-500/30 flex items-center justify-center text-white/50 text-xl">
+                <i class="fas fa-users"></i>
+              </div>
+              <div>
+                <p class="text-white font-semibold group-hover:text-blue-400 transition">
+                  {{ conv.subject|default:"Conversation" }}
+                </p>
+                <p class="text-sm text-white/50">
+                  {% for p in conv.participants.all %}
+                    {% if p != request.user %}{{ p.username }}{% if not forloop.last %}, {% endif %}{% endif %}
+                  {% endfor %}
+                </p>
+              </div>
+            </div>
+            <div class="flex items-center gap-4">
+              {% if conv.unread_count > 0 %}
+                <span class="bg-blue-500 text-white text-xs px-3 py-1 rounded-full">{{ conv.unread_count }}</span>
+              {% endif %}
+              <span class="text-xs text-white/30">{{ conv.updated_at|timesince }} ago</span>
+            </div>
+          </div>
+          {% if conv.last_message %}
+            <div class="mt-2 text-sm text-white/40 truncate">
+              {{ conv.last_message.sender.username }}: {{ conv.last_message.content|truncatechars:60 }}
+            </div>
+          {% endif %}
+        </a>
+      {% empty %}
+        <div class="glass p-12 rounded-2xl text-center">
+          <p class="text-white/40">No conversations yet.</p>
+          <a href="{% url 'messaging:create' %}" class="inline-block mt-4 px-6 py-2 rounded-full bg-gradient-to-r from-blue-600 to-violet-600 text-white font-medium hover:shadow-lg transition">Start a new conversation</a>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}
