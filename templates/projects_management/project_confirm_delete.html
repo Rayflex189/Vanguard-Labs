@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Delete Project – Vanguard Labs{% endblock %}
+
+{% block content %}
+<section class="py-20 px-4 md:px-8">
+  <div class="max-w-md mx-auto">
+    <div class="glass p-8 rounded-3xl text-center fade-in">
+      <i class="fas fa-exclamation-triangle text-red-400 text-5xl mb-4"></i>
+      <h1 class="text-2xl font-bold text-white">Delete Project</h1>
+      <p class="text-white/60 mt-2">Are you sure you want to delete <strong>{{ project.name }}</strong>?</p>
+      <form method="post" class="mt-6 flex gap-4">
+        {% csrf_token %}
+        <button type="submit" class="flex-1 py-3 rounded-full bg-red-600 text-white font-medium hover:bg-red-700 transition">Yes, Delete</button>
+        <a href="{% url 'projects_management:project_detail' project.slug %}" class="flex-1 py-3 rounded-full border border-white/20 text-white/80 hover:bg-white/5 transition text-center">Cancel</a>
+      </form>
+    </div>
+  </div>
+</section>
+{% endblock %}
