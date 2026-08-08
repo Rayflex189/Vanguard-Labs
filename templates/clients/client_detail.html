@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ client.name }} – Vanguard Labs{% endblock %}
+
+{% block content %}
+<section class="py-20 px-4 md:px-8">
+  <div class="max-w-6xl mx-auto">
+    <div class="flex flex-wrap items-center justify-between gap-4 mb-8">
+      <div>
+        <h1 class="text-4xl font-bold text-white">{{ client.name }}</h1>
+        <p class="text-white/50">{{ client.industry|default:"N/A" }}</p>
+      </div>
+      <div class="flex gap-3">
+        <a href="{% url 'clients:update' client.slug %}" class="px-4 py-2 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 transition">Edit</a>
+        <a href="{% url 'clients:delete' client.slug %}" class="px-4 py-2 rounded-full bg-red-500/20 border border-red-500/20 text-red-400 hover:bg-red-500/30 transition">Delete</a>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <!-- Main info -->
+      <div class="lg:col-span-2 space-y-6">
+        <div class="glass p-6 rounded-2xl">
+          <h2 class="text-xl font-semibold text-white mb-3">About</h2>
+          <p class="text-white/70">{{ client.description|default:"No description provided." }}</p>
+          {% if client.website %}
+            <a href="{{ client.website }}" target="_blank" class="inline-block mt-4 text-blue-400 hover:text-blue-300 transition"><i class="fas fa-external-link-alt mr-1"></i>Visit Website</a>
+          {% endif %}
+        </div>
+
+        <!-- Projects -->
+        {% if client.projects.all %}
+        <div class="glass p-6 rounded-2xl">
+          <h2 class="text-xl font-semibold text-white mb-3">Projects</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {% for p in client.projects.all %}
+              <div class="glass-light p-3 rounded-xl flex items-center justify-between">
+                <span class="text-white">{{ p.name }}</span>
+                <span class="text-xs px-2 py-1 rounded-full bg-blue-500/20 text-blue-300">{{ p.status }}</span>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
+
+        <!-- Notes -->
+        <div class="glass p-6 rounded-2xl">
+          <h2 class="text-xl font-semibold text-white mb-3">Notes</h2>
+          {% if client.notes.all %}
+            <div class="space-y-3">
+              {% for note in client.notes.all|slice:":5" %}
+                <div class="glass-light p-3 rounded-xl">
+                  <p class="text-white/80 text-sm">{{ note.content }}</p>
+                  <p class="text-xs text-white/30 mt-1">{{ note.created_at|date:"M d, Y" }} by {{ note.author.username|default:"Unknown" }}</p>
+                </div>
+              {% endfor %}
+            </div>
+          {% else %}
+            <p class="text-white/40 text-sm">No notes yet.</p>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="space-y-6">
+        <div class="glass p-6 rounded-2xl">
+          <h3 class="text-lg font-semibold text-white mb-3">Details</h3>
+          <ul class="space-y-2 text-sm text-white/60">
+            <li><span class="text-white/40">Status:</span> <span class="text-white">{{ client.get_status_display }}</span></li>
+            <li><span class="text-white/40">Assigned to:</span> {{ client.assigned_to.username|default:"Unassigned" }}</li>
+            <li><span class="text-white/40">Created:</span> {{ client.created_at|date:"M d, Y" }}</li>
+            <li><span class="text-white/40">Address:</span> {{ client.address|default:"N/A" }}</li>
+          </ul>
+        </div>
+
+        <!-- Contacts -->
+        <div class="glass p-6 rounded-2xl">
+          <h3 class="text-lg font-semibold text-white mb-3">Contacts</h3>
+          {% if client.contacts.all %}
+            <div class="space-y-3">
+              {% for contact in client.contacts.all %}
+                <div class="glass-light p-3 rounded-xl">
+                  <p class="text-white font-medium">{{ contact.full_name }}</p>
+                  <p class="text-xs text-white/40">{{ contact.job_title }}</p>
+                  <p class="text-xs text-blue-400">{{ contact.email }}</p>
+                  {% if contact.is_primary %}<span class="text-xs text-green-400">Primary</span>{% endif %}
+                </div>
+              {% endfor %}
+            </div>
+          {% else %}
+            <p class="text-white/40 text-sm">No contacts.</p>
+          {% endif %}
+          <a href="{% url 'clients:contact_create' client.slug %}" class="inline-block mt-3 text-blue-400 hover:text-blue-300 text-sm transition">Add Contact <i class="fas fa-plus ml-1"></i></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
